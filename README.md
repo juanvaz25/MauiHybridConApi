@@ -14,10 +14,10 @@ Este proyecto nace como una evolución de un **Maui Hybrid con SQLite** hacia un
 
 ## 🏗️ Estructura del repositorio
 
-/MauiHybridConApi
-│── MauiHybridWebApi → Proyecto Web API (publicado en SOMEE)
-│── MauiHybridSqlite → Proyecto original basado en SQLite (referencia histórica)
-│── MauiHybridConApi.sln → Solución que integra ambos proyectos
+/MauiHybridConApi<br>
+│── MauiHybridWebApi → Proyecto Web API (publicado en SOMEE)<br>
+│── MauiHybridSqlite → Proyecto original basado en SQLite (referencia histórica)<br>
+│── MauiHybridConApi.sln → Solución que integra ambos proyectos<br>
 
 
 ## 🚀 Objetivo
