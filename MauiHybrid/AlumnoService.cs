@@ -1,59 +1,45 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Json;
+using MauiHybrid; // tu clase Alumno existente
 
-namespace MauiHybrid
+namespace MauiHybrid.Services
 {
     public class AlumnoService
     {
-        private readonly AppDbContext _context;
+        private readonly HttpClient _httpClient;
+
+        private readonly string _baseUrl = "http://mauihybrid.somee.com/api/alumnos"; // API Somee#endif
 
         public AlumnoService()
         {
-            _context = new AppDbContext();
-            _context.Database.EnsureCreated();
-        }
-
-        public async Task AddAlumnoAsync(Alumno alumno)
-        {
-            _context.Alumnos.Add(alumno);
-            await _context.SaveChangesAsync();
+            _httpClient = new HttpClient { BaseAddress = new Uri(_baseUrl) };
         }
 
         public async Task<List<Alumno>> GetAlumnosAsync()
         {
-            return await _context.Alumnos.ToListAsync();
+            return await _httpClient.GetFromJsonAsync<List<Alumno>>("Alumnos") ?? new List<Alumno>();
         }
 
-        public async Task<Alumno> GetAlumnoByIdAsync(int id)
+        public async Task<Alumno?> GetAlumnoByIdAsync(int id)
         {
-            return await _context.Alumnos.FindAsync(id);
+            return await _httpClient.GetFromJsonAsync<Alumno>($"Alumnos/{id}");
         }
 
-        public async Task UpdateAlumnoAsync(Alumno alumno)
+        public async Task<bool> AddAlumnoAsync(Alumno alumno)
         {
-            var local = _context.Alumnos.Local.FirstOrDefault(e => e.Id == alumno.Id);
-            if (local != null)
-            {
-                _context.Entry(local).State = EntityState.Detached;
-            }
-
-            _context.Alumnos.Update(alumno);
-            await _context.SaveChangesAsync();
+            var response = await _httpClient.PostAsJsonAsync("Alumnos", alumno);
+            return response.IsSuccessStatusCode;
         }
 
-
-        public async Task DeleteAlumnoAsync(int id)
+        public async Task<bool> UpdateAlumnoAsync(Alumno alumno)
         {
-            var alumno = await _context.Alumnos.FindAsync(id);
-            if (alumno != null)
-            {
-                _context.Alumnos.Remove(alumno);
-                await _context.SaveChangesAsync();
-            }
+            var response = await _httpClient.PutAsJsonAsync($"Alumnos/{alumno.Id}", alumno);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> DeleteAlumnoAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"Alumnos/{id}");
+            return response.IsSuccessStatusCode;
         }
     }
 }

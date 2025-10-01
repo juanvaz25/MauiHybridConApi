@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using MauiHybrid.Services;
+using Microsoft.Extensions.Logging;
 
 namespace MauiHybrid
 {
@@ -17,12 +18,14 @@ namespace MauiHybrid
             builder.Services.AddMauiBlazorWebView();
 
 #if DEBUG
-    		builder.Services.AddBlazorWebViewDeveloperTools();
-    		builder.Logging.AddDebug();
+            builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Logging.AddDebug();
 #endif
+
             builder.Services.AddSingleton<AlumnoService>();
 
             return builder.Build();
         }
     }
 }
+
